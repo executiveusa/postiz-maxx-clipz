@@ -27,6 +27,8 @@
   Postiz offers everything you need to manage your social media posts,<br />build an audience, capture leads, and grow your business.
 </div>
 
+> **Note:** This repository contains the MAXX CLIPZ frontend rebrand of the Postiz project. Backend services remain unchanged.
+
 <div class="flex" align="center">
   <br />
   <img alt="Instagram" src="https://postiz.com/svgs/socials/Instagram.svg" width="32">
