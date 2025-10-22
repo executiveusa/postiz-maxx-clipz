@@ -6,13 +6,35 @@
 @import '@uppy/core/dist/style.css';
 @import '@uppy/dashboard/dist/style.css';
 
+:root {
+  --radius-card: var(--brand-radius-card);
+  --radius-input: var(--brand-radius-input);
+  --shadow-soft: var(--brand-shadow);
+}
+
 body {
   background: var(--new-bgColor) !important;
   color: var(--new-btn-text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    sans-serif;
+  line-height: 1.55;
 }
 
 body * {
   outline: none !important;
+}
+
+button,
+input,
+select,
+textarea {
+  border-radius: var(--radius-input);
+}
+
+.card,
+.surface-panel {
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-soft);
 }
 
 .box {

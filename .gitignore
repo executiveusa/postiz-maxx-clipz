@@ -65,3 +65,11 @@ Thumbs.db
 .secrets/
 libraries/plugins/src/plugins.ts
 i18n.cache
+
+# generated brand rasters
+/apps/frontend/public/apple-touch-icon.png
+/apps/frontend/public/favicon.png
+/apps/frontend/public/favicon.ico
+/apps/frontend/public/og-image.png
+/apps/frontend/public/postiz-fav.png
+/v8-compile-cache-0

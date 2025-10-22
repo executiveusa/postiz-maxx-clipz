@@ -1,4 +1,7 @@
-'use client';
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Logo source snapshot captures the MAXX CLIPZ mark 1`] = `
+"'use client';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -27,3 +30,5 @@ export const Logo = () => {
     </Link>
   );
 };
+"
+`;

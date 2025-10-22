@@ -13,6 +13,14 @@ module.exports = {
         sixth: 'var(--color-sixth)',
         seventh: 'var(--color-seventh)',
         gray: 'var(--color-gray)',
+        brand: {
+          primary: 'var(--brand-primary)',
+          accent: 'var(--brand-accent)',
+          surface: 'var(--brand-surface)',
+          muted: 'var(--brand-muted)',
+          success: 'var(--brand-success)',
+          danger: 'var(--brand-danger)',
+        },
         input: 'var(--color-input)',
         inputText: 'var(--color-input-text)',
         tableBorder: 'var(--color-table-border)',
@@ -103,8 +111,12 @@ module.exports = {
         loginBox: 'url(/auth/login-box.png)',
         loginBg: 'url(/auth/bg-login.png)',
       },
+      borderRadius: {
+        card: 'var(--radius-card)',
+        input: 'var(--radius-input)',
+      },
       fontFamily: {
-        sans: ['Helvetica Neue'],
+        sans: ['Inter', 'Helvetica Neue', 'Arial', 'sans-serif'],
       },
       animation: {
         fade: 'fadeOut 0.5s ease-in-out',
@@ -122,6 +134,7 @@ module.exports = {
         yellowToast: '0px 0px 50px rgba(252, 186, 3, 0.3)',
         greenToast: '0px 0px 50px rgba(60, 124, 90, 0.3)',
         menu: 'var(--menu-shadow)',
+        soft: 'var(--shadow-soft)',
       },
       // that is actual animation
       keyframes: (theme) => ({
