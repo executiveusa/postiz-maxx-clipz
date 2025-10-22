@@ -40,7 +40,8 @@
     "docker-build": "./var/docker/docker-build.sh",
     "docker-create": "./var/docker/docker-create.sh",
     "postinstall": "pnpm run prisma-generate",
-    "test": "jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit"
+    "test": "jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit",
+    "test:ui-guard": "node --test scripts/__tests__/ensure-ui-only.test.mjs"
   },
   "dependencies": {
     "@ag-ui/mastra": "0.2.0",
