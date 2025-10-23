@@ -1,0 +1,28 @@
+{
+  "name": "firebase-functions-backend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "clean": "rimraf lib",
+    "dev": "firebase emulators:start --only functions,firestore,hosting --project maxx-clipz",
+    "lint": "eslint \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^5.1.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

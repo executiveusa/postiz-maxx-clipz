@@ -22,7 +22,7 @@ const RenderPreviewDate = dynamicLoad(
 
 dayjs.extend(utc);
 export const metadata: Metadata = {
-  title: `${isGeneralServerSide() ? 'Postiz' : 'Gitroom'} Preview`,
+  title: `${isGeneralServerSide() ? 'MAXX CLIPZ' : 'Gitroom'} Preview`,
   description: '',
 };
 export default async function Auth({
