@@ -45,6 +45,9 @@
     "test": "pnpm run guard:ui-only && jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit",
     "deploy:firebase": "pnpm exec firebase deploy",
     "emulate:firebase": "pnpm exec firebase emulators:start"
+    "test": "pnpm run guard:ui-only && jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit"
+    "test": "jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit",
+    "test:ui-guard": "node --test scripts/__tests__/ensure-ui-only.test.mjs"
   },
   "dependencies": {
     "@ag-ui/mastra": "0.2.0",
