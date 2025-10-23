@@ -106,6 +106,38 @@
 
 To have the project up and running, please follow the [Quick Start Guide](https://docs.postiz.com/quickstart)
 
+## Firebase hosting & backend
+
+The repository now ships with a Firebase-ready backend (`apps/firebase-functions`) and deployment workflow:
+
+1. Install dependencies and authenticate with Firebase:
+   ```bash
+   pnpm install
+   pnpm exec firebase login
+   ```
+2. Configure the project ID in [`.firebaserc`](./.firebaserc) or export `FIREBASE_DEPLOY_TARGET` when deploying from CI.
+3. Populate the frontend runtime variables (e.g. in `.env.local`):
+   ```bash
+   NEXT_PUBLIC_FIREBASE_API_KEY=your-api-key
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=your-project-id
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=sender-id
+   NEXT_PUBLIC_FIREBASE_APP_ID=app-id
+   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=measurement-id
+   NEXT_PUBLIC_FIREBASE_FUNCTION_URL=https://us-central1-your-project.cloudfunctions.net/api
+   ```
+4. (Optional) Point the frontend at local emulators by setting `NEXT_PUBLIC_FIREBASE_USE_EMULATORS=true` and running:
+   ```bash
+   pnpm run emulate:firebase
+   ```
+5. Build and deploy both the Next.js frontend and Firebase Functions backend in one command:
+   ```bash
+   pnpm run deploy:firebase
+   ```
+
+The Firebase Cloud Function exposes REST endpoints for managing scheduled posts (`/posts` CRUD + `/health`). The frontend automatically initialises the Firebase SDK when configuration is present, making it straightforward to adopt Firestore or Firebase Auth features across the application.
+
 ## Sponsor Postiz
 
 We now give a few options to Sponsor Postiz:

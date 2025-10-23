@@ -5,6 +5,7 @@ import '../global.scss';
 import 'react-tooltip/dist/react-tooltip.css';
 import '@copilotkit/react-ui/styles.css';
 import LayoutContext from '@gitroom/frontend/components/layout/layout.context';
+import { FirebaseProvider } from '@gitroom/frontend/components/providers/firebase-provider';
 import { ReactNode } from 'react';
 import { Inter } from 'next/font/google';
 import PlausibleProvider from 'next-plausible';
@@ -88,10 +89,12 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
                 phkey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
                 host={process.env.NEXT_PUBLIC_POSTHOG_HOST}
               >
-                <LayoutContext>
-                  <UtmSaver />
-                  {children}
-                </LayoutContext>
+                <FirebaseProvider>
+                  <LayoutContext>
+                    <UtmSaver />
+                    {children}
+                  </LayoutContext>
+                </FirebaseProvider>
               </PHProvider>
             </Plausible>
           </SentryComponent>

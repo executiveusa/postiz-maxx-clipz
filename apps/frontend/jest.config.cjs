@@ -12,4 +12,13 @@ module.exports = {
     '^canvas$': '<rootDir>/../../jest-canvas-mock.js',
   },
   testMatch: ['**/__tests__/**/*.test.js'],
+  transform: {
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        tsconfig: '<rootDir>/tsconfig.json',
+      },
+    ],
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
