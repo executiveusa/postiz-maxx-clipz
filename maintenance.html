@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Mode - Postiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        
+        p {
+            font-size: 1.125rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+        
+        .status {
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 5px;
+        }
+        
+        .status-label {
+            font-weight: 600;
+        }
+        
+        .status-value {
+            opacity: 0.8;
+        }
+        
+        .alert {
+            margin-top: 30px;
+            padding: 15px 20px;
+            background: rgba(255, 215, 0, 0.2);
+            border-left: 4px solid #ffd700;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+        
+        .alert-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #ffd700;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+        
+        .migration-info {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            text-align: left;
+        }
+        
+        .migration-info h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .migration-info ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .migration-info li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .migration-info li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ffd700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon pulse">
+            🔧
+        </div>
+        
+        <h1>Maintenance Mode</h1>
+        
+        <p>
+            We're temporarily updating the application to optimize performance and manage resources.
+        </p>
+        
+        <p>
+            The service has been automatically paused to stay within free-tier limits.
+        </p>
+        
+        <div class="status">
+            <div class="status-item">
+                <span class="status-label">Status:</span>
+                <span class="status-value">🔴 Service Paused</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Reason:</span>
+                <span class="status-value">Free Tier Limit Protection</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Action:</span>
+                <span class="status-value">Automatic Shutdown Triggered</span>
+            </div>
+        </div>
+        
+        <div class="alert">
+            <div class="alert-title">⚠️ Cost Protection Active</div>
+            <p>
+                This application uses automatic cost-protection guardrails to prevent 
+                unexpected charges. The service was automatically paused when approaching 
+                free-tier limits.
+            </p>
+        </div>
+        
+        <div class="migration-info">
+            <h3>🚀 Next Steps</h3>
+            <ul>
+                <li>Review usage metrics in Railway dashboard</li>
+                <li>Upgrade to a paid plan for continuous operation</li>
+                <li>Or migrate to Coolify for self-hosted deployment</li>
+                <li>Check COOLIFY_MIGRATION.md in the repository for migration guide</li>
+                <li>Monitor costs and adjust resource limits as needed</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>
+                Postiz MAXX CLIPZ - Railway Zero-Secrets Deployment<br>
+                Auto-deployed maintenance page via cost protection system
+            </p>
+            <p style="margin-top: 10px; font-size: 0.8rem;">
+                Last updated: <span id="timestamp"></span>
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        // Display current timestamp
+        document.getElementById('timestamp').textContent = new Date().toLocaleString();
+        
+        // Auto-refresh every 5 minutes
+        setTimeout(() => {
+            location.reload();
+        }, 300000);
+    </script>
+</body>
+</html>

@@ -42,12 +42,15 @@
     "docker-create": "./var/docker/docker-create.sh",
     "postinstall": "pnpm run prisma-generate",
     "guard:ui-only": "node ./scripts/ensure-ui-only.mjs",
-    "test": "pnpm run guard:ui-only && jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit",
-    "deploy:firebase": "pnpm exec firebase deploy",
-    "emulate:firebase": "pnpm exec firebase emulators:start"
-    "test": "pnpm run guard:ui-only && jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit"
     "test": "jest --coverage --detectOpenHandles --reporters=default --reporters=jest-junit",
-    "test:ui-guard": "node --test scripts/__tests__/ensure-ui-only.test.mjs"
+    "test:ui-guard": "node --test scripts/__tests__/ensure-ui-only.test.mjs",
+    "deploy:firebase": "pnpm exec firebase deploy",
+    "emulate:firebase": "pnpm exec firebase emulators:start",
+    "railway:detect-secrets": "node scripts/detect-secrets.mjs",
+    "railway:detect-secrets:basic": "node scripts/detect-secrets.mjs --mode basic",
+    "railway:detect-secrets:full": "node scripts/detect-secrets.mjs --mode full",
+    "railway:usage": "node scripts/railway-usage-monitor.mjs",
+    "railway:usage:no-shutdown": "node scripts/railway-usage-monitor.mjs --no-auto-shutdown"
   },
   "dependencies": {
     "@ag-ui/mastra": "0.2.0",

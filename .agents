@@ -1,0 +1,903 @@
+{
+  "project": "postiz-maxx-clipz",
+  "version": "1.0.0",
+  "description": "Comprehensive secret specification for Postiz deployment on Railway with zero-secrets architecture",
+  "generated": "2025-12-07T15:37:30.644Z",
+  "deployment_targets": ["railway", "coolify", "self-hosted"],
+  
+  "secrets": {
+    "core": [
+      {
+        "name": "DATABASE_URL",
+        "description": "PostgreSQL database connection string",
+        "required": true,
+        "format": "postgresql://user:password@host:port/database",
+        "default": "postgresql://postiz-user:postiz-password@localhost:5432/postiz-db-local",
+        "category": "infrastructure",
+        "railway_provision": true,
+        "notes": "Railway can auto-provision PostgreSQL database"
+      },
+      {
+        "name": "REDIS_URL",
+        "description": "Redis connection string for caching and queues",
+        "required": true,
+        "format": "redis://host:port",
+        "default": "redis://localhost:6379",
+        "category": "infrastructure",
+        "railway_provision": true,
+        "notes": "Railway can auto-provision Redis instance"
+      },
+      {
+        "name": "JWT_SECRET",
+        "description": "Secret key for JWT token signing",
+        "required": true,
+        "format": "string (minimum 32 characters recommended)",
+        "default": "GENERATE_RANDOM_STRING_MIN_32_CHARS",
+        "category": "security",
+        "railway_provision": false,
+        "notes": "Must be a long random string for security"
+      },
+      {
+        "name": "FRONTEND_URL",
+        "description": "Public URL where frontend is accessible",
+        "required": true,
+        "format": "https://domain.com",
+        "default": "http://localhost:4200",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Will be provided by Railway after deployment"
+      },
+      {
+        "name": "NEXT_PUBLIC_BACKEND_URL",
+        "description": "Public URL for backend API",
+        "required": true,
+        "format": "https://domain.com",
+        "default": "http://localhost:3000",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Will be provided by Railway after deployment"
+      },
+      {
+        "name": "BACKEND_INTERNAL_URL",
+        "description": "Internal URL for backend (for server-side calls)",
+        "required": true,
+        "format": "http://service-name:port",
+        "default": "http://localhost:3000",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Use Railway internal service URL"
+      }
+    ],
+    
+    "optional_storage": [
+      {
+        "name": "STORAGE_PROVIDER",
+        "description": "Storage provider for media files",
+        "required": false,
+        "format": "local|cloudflare",
+        "default": "local",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Set to 'local' for initial deployment, upgrade to Cloudflare later"
+      },
+      {
+        "name": "CLOUDFLARE_ACCOUNT_ID",
+        "description": "Cloudflare account ID for R2 storage",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Optional - only needed if using Cloudflare storage"
+      },
+      {
+        "name": "CLOUDFLARE_ACCESS_KEY",
+        "description": "Cloudflare R2 access key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Optional - only needed if using Cloudflare storage"
+      },
+      {
+        "name": "CLOUDFLARE_SECRET_ACCESS_KEY",
+        "description": "Cloudflare R2 secret access key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Optional - only needed if using Cloudflare storage"
+      },
+      {
+        "name": "CLOUDFLARE_BUCKETNAME",
+        "description": "Cloudflare R2 bucket name",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Optional - only needed if using Cloudflare storage"
+      },
+      {
+        "name": "CLOUDFLARE_BUCKET_URL",
+        "description": "Cloudflare R2 bucket public URL",
+        "required": false,
+        "format": "https://bucket-url.r2.cloudflarestorage.com/",
+        "default": "",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Optional - only needed if using Cloudflare storage"
+      },
+      {
+        "name": "CLOUDFLARE_REGION",
+        "description": "Cloudflare region",
+        "required": false,
+        "format": "string",
+        "default": "auto",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Optional - defaults to 'auto'"
+      },
+      {
+        "name": "UPLOAD_DIRECTORY",
+        "description": "Local upload directory path",
+        "required": false,
+        "format": "path",
+        "default": "./uploads",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Only needed if STORAGE_PROVIDER is 'local'"
+      },
+      {
+        "name": "NEXT_PUBLIC_UPLOAD_STATIC_DIRECTORY",
+        "description": "Public static directory for uploads",
+        "required": false,
+        "format": "path",
+        "default": "",
+        "category": "storage",
+        "railway_provision": false,
+        "notes": "Only needed if STORAGE_PROVIDER is 'local'"
+      }
+    ],
+    
+    "optional_email": [
+      {
+        "name": "RESEND_API_KEY",
+        "description": "Resend API key for email notifications",
+        "required": false,
+        "format": "re_xxxxxxxxxxxx",
+        "default": "",
+        "category": "email",
+        "railway_provision": false,
+        "notes": "If not set, email verification is disabled and users auto-activate"
+      },
+      {
+        "name": "EMAIL_FROM_ADDRESS",
+        "description": "From email address for notifications",
+        "required": false,
+        "format": "email@domain.com",
+        "default": "",
+        "category": "email",
+        "railway_provision": false,
+        "notes": "Required only if RESEND_API_KEY is set"
+      },
+      {
+        "name": "EMAIL_FROM_NAME",
+        "description": "From name for email notifications",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "email",
+        "railway_provision": false,
+        "notes": "Required only if RESEND_API_KEY is set"
+      }
+    ],
+    
+    "optional_social_media": [
+      {
+        "name": "X_API_KEY",
+        "description": "Twitter/X API key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "X_API_SECRET",
+        "description": "Twitter/X API secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "LINKEDIN_CLIENT_ID",
+        "description": "LinkedIn OAuth client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "LINKEDIN_CLIENT_SECRET",
+        "description": "LinkedIn OAuth client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "REDDIT_CLIENT_ID",
+        "description": "Reddit OAuth client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "REDDIT_CLIENT_SECRET",
+        "description": "Reddit OAuth client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "GITHUB_CLIENT_ID",
+        "description": "GitHub OAuth client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "GITHUB_CLIENT_SECRET",
+        "description": "GitHub OAuth client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "FACEBOOK_APP_ID",
+        "description": "Facebook App ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "FACEBOOK_APP_SECRET",
+        "description": "Facebook App Secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "THREADS_APP_ID",
+        "description": "Threads App ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "THREADS_APP_SECRET",
+        "description": "Threads App Secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "YOUTUBE_CLIENT_ID",
+        "description": "YouTube OAuth client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "YOUTUBE_CLIENT_SECRET",
+        "description": "YouTube OAuth client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "TIKTOK_CLIENT_ID",
+        "description": "TikTok client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "TIKTOK_CLIENT_SECRET",
+        "description": "TikTok client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "PINTEREST_CLIENT_ID",
+        "description": "Pinterest client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "PINTEREST_CLIENT_SECRET",
+        "description": "Pinterest client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "DRIBBBLE_CLIENT_ID",
+        "description": "Dribbble client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "DRIBBBLE_CLIENT_SECRET",
+        "description": "Dribbble client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "DISCORD_CLIENT_ID",
+        "description": "Discord client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "DISCORD_CLIENT_SECRET",
+        "description": "Discord client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "DISCORD_BOT_TOKEN_ID",
+        "description": "Discord bot token ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "SLACK_ID",
+        "description": "Slack client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "SLACK_SECRET",
+        "description": "Slack client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "SLACK_SIGNING_SECRET",
+        "description": "Slack signing secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "MASTODON_URL",
+        "description": "Mastodon instance URL",
+        "required": false,
+        "format": "https://mastodon.social",
+        "default": "https://mastodon.social",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "MASTODON_CLIENT_ID",
+        "description": "Mastodon client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "MASTODON_CLIENT_SECRET",
+        "description": "Mastodon client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "social",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      }
+    ],
+    
+    "optional_integrations": [
+      {
+        "name": "BEEHIIVE_API_KEY",
+        "description": "Beehiiv API key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "integration",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "BEEHIIVE_PUBLICATION_ID",
+        "description": "Beehiiv publication ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "integration",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "LISTMONK_DOMAIN",
+        "description": "Listmonk domain",
+        "required": false,
+        "format": "https://domain.com",
+        "default": "",
+        "category": "integration",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "LISTMONK_USER",
+        "description": "Listmonk username",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "integration",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "LISTMONK_API_KEY",
+        "description": "Listmonk API key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "integration",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "LISTMONK_LIST_ID",
+        "description": "Listmonk list ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "integration",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready"
+      },
+      {
+        "name": "OPENAI_API_KEY",
+        "description": "OpenAI API key for AI features",
+        "required": false,
+        "format": "sk-xxxxxxxxxxxx",
+        "default": "",
+        "category": "ai",
+        "railway_provision": false,
+        "notes": "Optional - AI features will be disabled without this"
+      }
+    ],
+    
+    "optional_payment": [
+      {
+        "name": "STRIPE_PUBLISHABLE_KEY",
+        "description": "Stripe publishable key",
+        "required": false,
+        "format": "pk_xxxxxxxxxxxx",
+        "default": "",
+        "category": "payment",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready to accept payments"
+      },
+      {
+        "name": "STRIPE_SECRET_KEY",
+        "description": "Stripe secret key",
+        "required": false,
+        "format": "sk_xxxxxxxxxxxx",
+        "default": "",
+        "category": "payment",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready to accept payments"
+      },
+      {
+        "name": "STRIPE_SIGNING_KEY",
+        "description": "Stripe webhook signing key",
+        "required": false,
+        "format": "whsec_xxxxxxxxxxxx",
+        "default": "",
+        "category": "payment",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready to accept payments"
+      },
+      {
+        "name": "STRIPE_SIGNING_KEY_CONNECT",
+        "description": "Stripe Connect signing key",
+        "required": false,
+        "format": "whsec_xxxxxxxxxxxx",
+        "default": "",
+        "category": "payment",
+        "railway_provision": false,
+        "notes": "Disabled by default - enable when ready to accept payments"
+      },
+      {
+        "name": "FEE_AMOUNT",
+        "description": "Platform fee amount",
+        "required": false,
+        "format": "decimal",
+        "default": "0.05",
+        "category": "payment",
+        "railway_provision": false,
+        "notes": "Fee percentage for transactions"
+      }
+    ],
+    
+    "optional_oauth": [
+      {
+        "name": "POSTIZ_GENERIC_OAUTH",
+        "description": "Enable generic OAuth",
+        "required": false,
+        "format": "true|false",
+        "default": "false",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Set to true to enable generic OAuth provider"
+      },
+      {
+        "name": "NEXT_PUBLIC_POSTIZ_OAUTH_DISPLAY_NAME",
+        "description": "OAuth provider display name",
+        "required": false,
+        "format": "string",
+        "default": "Authentik",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "NEXT_PUBLIC_POSTIZ_OAUTH_LOGO_URL",
+        "description": "OAuth provider logo URL",
+        "required": false,
+        "format": "https://url",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "POSTIZ_OAUTH_URL",
+        "description": "OAuth provider base URL",
+        "required": false,
+        "format": "https://domain.com",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "POSTIZ_OAUTH_AUTH_URL",
+        "description": "OAuth authorization URL",
+        "required": false,
+        "format": "https://domain.com/authorize",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "POSTIZ_OAUTH_TOKEN_URL",
+        "description": "OAuth token URL",
+        "required": false,
+        "format": "https://domain.com/token",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "POSTIZ_OAUTH_USERINFO_URL",
+        "description": "OAuth user info URL",
+        "required": false,
+        "format": "https://domain.com/userinfo",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "POSTIZ_OAUTH_CLIENT_ID",
+        "description": "OAuth client ID",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      },
+      {
+        "name": "POSTIZ_OAUTH_CLIENT_SECRET",
+        "description": "OAuth client secret",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "oauth",
+        "railway_provision": false,
+        "notes": "Only needed if POSTIZ_GENERIC_OAUTH is true"
+      }
+    ],
+    
+    "optional_configuration": [
+      {
+        "name": "DISABLE_REGISTRATION",
+        "description": "Disable new user registration",
+        "required": false,
+        "format": "true|false",
+        "default": "false",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Set to true to disable new registrations"
+      },
+      {
+        "name": "API_LIMIT",
+        "description": "Public API hourly rate limit",
+        "required": false,
+        "format": "number",
+        "default": "30",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Requests per hour limit for public API"
+      },
+      {
+        "name": "NEXT_PUBLIC_DISCORD_SUPPORT",
+        "description": "Discord support server URL",
+        "required": false,
+        "format": "https://discord.gg/xxxxx",
+        "default": "",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Optional Discord support link"
+      },
+      {
+        "name": "NEXT_PUBLIC_POLOTNO",
+        "description": "Polotno API key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Optional Polotno integration"
+      },
+      {
+        "name": "NX_ADD_PLUGINS",
+        "description": "NX plugin configuration",
+        "required": false,
+        "format": "true|false",
+        "default": "false",
+        "category": "development",
+        "railway_provision": false,
+        "notes": "Development configuration"
+      },
+      {
+        "name": "IS_GENERAL",
+        "description": "General mode flag",
+        "required": true,
+        "format": "true|false",
+        "default": "true",
+        "category": "configuration",
+        "railway_provision": false,
+        "notes": "Required for now - set to true"
+      }
+    ],
+    
+    "optional_shortlink": [
+      {
+        "name": "DUB_TOKEN",
+        "description": "Dub.co API token",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Optional URL shortener integration"
+      },
+      {
+        "name": "DUB_API_ENDPOINT",
+        "description": "Dub.co API endpoint",
+        "required": false,
+        "format": "https://api.dub.co",
+        "default": "https://api.dub.co",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Only needed if DUB_TOKEN is set"
+      },
+      {
+        "name": "DUB_SHORT_LINK_DOMAIN",
+        "description": "Dub.co short link domain",
+        "required": false,
+        "format": "dub.sh",
+        "default": "dub.sh",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Only needed if DUB_TOKEN is set"
+      },
+      {
+        "name": "SHORT_IO_SECRET_KEY",
+        "description": "Short.io API secret key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Optional URL shortener integration"
+      },
+      {
+        "name": "KUTT_API_KEY",
+        "description": "Kutt.it API key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Optional URL shortener integration"
+      },
+      {
+        "name": "KUTT_API_ENDPOINT",
+        "description": "Kutt.it API endpoint",
+        "required": false,
+        "format": "https://kutt.it/api/v2",
+        "default": "https://kutt.it/api/v2",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Only needed if KUTT_API_KEY is set"
+      },
+      {
+        "name": "KUTT_SHORT_LINK_DOMAIN",
+        "description": "Kutt.it short link domain",
+        "required": false,
+        "format": "kutt.it",
+        "default": "kutt.it",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Only needed if KUTT_API_KEY is set"
+      },
+      {
+        "name": "LINK_DRIP_API_KEY",
+        "description": "LinkDrip API key",
+        "required": false,
+        "format": "string",
+        "default": "",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Optional URL shortener integration"
+      },
+      {
+        "name": "LINK_DRIP_API_ENDPOINT",
+        "description": "LinkDrip API endpoint",
+        "required": false,
+        "format": "https://api.linkdrip.com/v1/",
+        "default": "https://api.linkdrip.com/v1/",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Only needed if LINK_DRIP_API_KEY is set"
+      },
+      {
+        "name": "LINK_DRIP_SHORT_LINK_DOMAIN",
+        "description": "LinkDrip short link domain",
+        "required": false,
+        "format": "dripl.ink",
+        "default": "dripl.ink",
+        "category": "shortlink",
+        "railway_provision": false,
+        "notes": "Only needed if LINK_DRIP_API_KEY is set"
+      }
+    ]
+  },
+  
+  "deployment_modes": {
+    "zero_secrets": {
+      "description": "Minimal deployment with no third-party integrations",
+      "required_secrets": ["DATABASE_URL", "REDIS_URL", "JWT_SECRET", "FRONTEND_URL", "NEXT_PUBLIC_BACKEND_URL", "BACKEND_INTERNAL_URL", "IS_GENERAL"],
+      "disabled_features": ["email_verification", "social_media_posting", "payment_processing", "ai_features", "url_shortening"]
+    },
+    "basic": {
+      "description": "Basic deployment with email and local storage",
+      "required_secrets": ["DATABASE_URL", "REDIS_URL", "JWT_SECRET", "FRONTEND_URL", "NEXT_PUBLIC_BACKEND_URL", "BACKEND_INTERNAL_URL", "IS_GENERAL", "RESEND_API_KEY", "EMAIL_FROM_ADDRESS"],
+      "disabled_features": ["social_media_posting", "payment_processing", "ai_features"]
+    },
+    "full": {
+      "description": "Full deployment with all features enabled",
+      "required_secrets": ["all_core_secrets", "all_optional_secrets_as_needed"],
+      "disabled_features": []
+    }
+  },
+  
+  "schema_version": "1.0",
+  "notes": [
+    "This file is generated for use by secret-provisioning agents",
+    "Railway can auto-provision DATABASE_URL and REDIS_URL",
+    "All optional secrets can be added incrementally after initial deployment",
+    "For zero-secrets deployment, only core secrets are required",
+    "Social media integrations are disabled by default for free-tier deployments"
+  ]
+}

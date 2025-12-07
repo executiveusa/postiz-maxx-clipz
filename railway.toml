@@ -1,3 +1,42 @@
+# Railway Zero-Secrets Deployment Configuration
+# Enhanced with cost-protection guardrails and resource limits
+
+[build]
+    # Use minimal build resources
+    builder = "NIXPACKS"
+    
+[deploy]
+    # Force minimal instance size for cost protection
+    # startCommand will be auto-detected by Nixpacks
+    restartPolicyType = "ON_FAILURE"
+    restartPolicyMaxRetries = 3
+    
+    # Health check configuration
+    healthcheckPath = "/api/health"
+    healthcheckTimeout = 100
+    
 [phases.setup]
     nixPkgs = ['nodejs', 'python3']
     aptPkgs = ['build-essential', 'libudev-dev']
+    
+# Cost Protection Guardrails
+# These settings enforce minimal resource usage for free-tier deployment
+[cost_protection]
+    # Resource limits (applied via environment variables)
+    max_memory_mb = 512
+    max_cpu_cores = 0.5
+    
+    # Free tier monitoring markers
+    enable_usage_monitoring = true
+    shutdown_on_limit = true
+    
+    # Alert thresholds (percentage of free tier)
+    warning_threshold = 0.75
+    critical_threshold = 0.90
+    
+# Deployment modes
+[deployment_modes]
+    # zero_secrets: Minimal deployment with no third-party integrations
+    # basic: Basic deployment with email and local storage  
+    # full: Full deployment with all features
+    default_mode = "zero_secrets"
