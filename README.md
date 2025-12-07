@@ -138,6 +138,88 @@ The repository now ships with a Firebase-ready backend (`apps/firebase-functions
 
 The Firebase Cloud Function exposes REST endpoints for managing scheduled posts (`/posts` CRUD + `/health`). The frontend automatically initialises the Firebase SDK when configuration is present, making it straightforward to adopt Firestore or Firebase Auth features across the application.
 
+## Railway Zero-Secrets Deployment 🚀
+
+Deploy Postiz with minimal configuration and automatic cost protection:
+
+### Quick Deploy to Railway
+
+```bash
+# Install Railway CLI
+npm install -g @railway/cli
+
+# Login and initialize
+railway login
+railway init
+
+# Add services
+railway add --plugin postgresql
+railway add --plugin redis
+
+# Set required secrets
+railway variables set JWT_SECRET="$(openssl rand -base64 32)"
+railway variables set IS_GENERAL="true"
+
+# Deploy
+railway up
+```
+
+### Features
+
+- ✅ **Zero-secrets mode** - Deploy with only 7 core environment variables
+- ✅ **Cost-protection guardrails** - Automatic monitoring and shutdown before exceeding free tier
+- ✅ **Incremental features** - Enable integrations one at a time as needed
+- ✅ **Maintenance mode** - Automatic failover when limits reached
+- ✅ **Migration support** - Easy path to Coolify for self-hosting
+
+### Deployment Modes
+
+| Mode | Required Secrets | Features | Cost |
+|------|-----------------|----------|------|
+| **Zero-Secrets** | 7 core vars | Basic functionality | Free tier ✅ |
+| **Basic** | ~10 vars | + Email verification | Mostly free ⚠️ |
+| **Full** | 50+ vars | All features enabled | Paid plan 💰 |
+
+### Monitoring & Validation
+
+```bash
+# Check required secrets
+npm run railway:detect-secrets
+
+# Monitor usage
+npm run railway:usage
+
+# Check full configuration
+npm run railway:detect-secrets:full
+```
+
+### Documentation
+
+- **[🚀 Railway Deployment Guide](./RAILWAY_DEPLOYMENT.md)** - Step-by-step deployment instructions
+- **[🔐 Integration Stubs](./INTEGRATION_STUBS.md)** - Which features are disabled by default
+- **[📊 Zero-Secrets System](./ZERO_SECRETS_DEPLOYMENT.md)** - Complete system overview
+- **[🐳 Coolify Migration](./COOLIFY_MIGRATION.md)** - Self-hosting alternative
+
+### Secret Specifications
+
+All secrets are documented in the [`.agents`](./.agents) file with:
+- Required vs optional classification
+- Format specifications
+- Default values
+- Railway auto-provision flags
+- Category grouping
+
+### Cost Protection
+
+The system automatically:
+- Monitors Railway free-tier usage
+- Triggers warnings at 75% usage
+- Auto-shuts down at 95% to prevent charges
+- Deploys maintenance page
+- Provides migration options
+
+For more information, see [ZERO_SECRETS_DEPLOYMENT.md](./ZERO_SECRETS_DEPLOYMENT.md).
+
 ## Sponsor Postiz
 
 We now give a few options to Sponsor Postiz:
