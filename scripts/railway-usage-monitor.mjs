@@ -105,7 +105,12 @@ class RailwayUsageMonitor {
    *   }
    */
   async getUsage() {
-    // TODO: Replace with actual Railway API call
+    // CURRENT STATUS: Mock implementation for demonstration
+    // NEXT STEPS: 
+    //   1. Create Railway API client
+    //   2. Authenticate with API token
+    //   3. Query actual usage metrics
+    //   4. Replace the mock data below with real API responses
     const currentDate = new Date();
     const dayOfMonth = currentDate.getDate();
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -241,7 +246,7 @@ class RailwayUsageMonitor {
   }
 
   /**
-   * Deploy maintenance mode
+   * Prepare maintenance mode (provides manual instructions)
    * 
    * NOTE: This function provides guidance but does not automatically deploy.
    * Automatic deployment would require:
@@ -252,7 +257,7 @@ class RailwayUsageMonitor {
    * 
    * For now, this provides manual instructions.
    */
-  async deployMaintenanceMode() {
+  async prepareMaintenanceMode() {
     console.log(`${colors.yellow}Preparing maintenance mode...${colors.reset}`);
     
     const maintenancePath = path.join(__dirname, '..', 'maintenance.html');
@@ -294,7 +299,7 @@ class RailwayUsageMonitor {
     console.log('  1. ✓ Logged shutdown event');
     console.log('  2. ⏳ Preparing maintenance mode');
     
-    await this.deployMaintenanceMode();
+    await this.prepareMaintenanceMode();
     
     console.log('  3. ⚠ Manual action required:');
     console.log('     - Run: railway down');
