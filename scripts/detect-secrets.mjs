@@ -318,8 +318,10 @@ class SecretDetector {
   }
 }
 
-// CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+// CLI - check if this script is being run directly
+const scriptPath = fileURLToPath(import.meta.url);
+const runPath = process.argv[1];
+if (scriptPath === runPath) {
   const args = process.argv.slice(2);
   const options = {};
   

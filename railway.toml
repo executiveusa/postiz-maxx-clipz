@@ -19,10 +19,20 @@
     nixPkgs = ['nodejs', 'python3']
     aptPkgs = ['build-essential', 'libudev-dev']
     
+# =============================================================================
+# Cost Protection and Deployment Configuration (Documentation)
+# =============================================================================
+# NOTE: The sections below are for documentation and automation scripts.
+# They are not parsed by Railway but are used by:
+# - scripts/railway-usage-monitor.mjs
+# - scripts/detect-secrets.mjs
+# - RAILWAY_DEPLOYMENT.md documentation
+# =============================================================================
+
 # Cost Protection Guardrails
-# These settings enforce minimal resource usage for free-tier deployment
+# These thresholds are used by railway-usage-monitor.mjs to trigger alerts
 [cost_protection]
-    # Resource limits (applied via environment variables)
+    # Resource limits (reference values for monitoring)
     max_memory_mb = 512
     max_cpu_cores = 0.5
     
@@ -31,10 +41,12 @@
     shutdown_on_limit = true
     
     # Alert thresholds (percentage of free tier)
-    warning_threshold = 0.75
-    critical_threshold = 0.90
+    warning_threshold = 0.75   # 75% - log warning
+    critical_threshold = 0.90  # 90% - send critical alert
+    shutdown_threshold = 0.95  # 95% - trigger auto-shutdown
     
 # Deployment modes
+# Used by detect-secrets.mjs to validate environment configuration
 [deployment_modes]
     # zero_secrets: Minimal deployment with no third-party integrations
     # basic: Basic deployment with email and local storage  

@@ -85,11 +85,27 @@ class RailwayUsageMonitor {
 
   /**
    * Get Railway usage data
-   * Note: This is a mock implementation since Railway CLI doesn't expose usage directly
-   * In production, this would call Railway's API
+   * 
+   * IMPORTANT: This is a MOCK implementation for demonstration purposes.
+   * 
+   * To implement actual Railway usage monitoring:
+   * 1. Obtain Railway API token from your account
+   * 2. Use Railway GraphQL API: https://railway.app/api
+   * 3. Query: metricsForService, projectUsage, etc.
+   * 4. Replace this mock with actual API calls
+   * 
+   * Example GraphQL query:
+   *   query {
+   *     project(id: $projectId) {
+   *       usage {
+   *         currentUsage
+   *         estimatedUsage
+   *       }
+   *     }
+   *   }
    */
   async getUsage() {
-    // Mock implementation - replace with actual API call
+    // TODO: Replace with actual Railway API call
     const currentDate = new Date();
     const dayOfMonth = currentDate.getDate();
     const daysInMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
@@ -226,9 +242,18 @@ class RailwayUsageMonitor {
 
   /**
    * Deploy maintenance mode
+   * 
+   * NOTE: This function provides guidance but does not automatically deploy.
+   * Automatic deployment would require:
+   * 1. Railway API token
+   * 2. Creating a new static service
+   * 3. Deploying maintenance.html via API
+   * 4. Updating DNS routing
+   * 
+   * For now, this provides manual instructions.
    */
   async deployMaintenanceMode() {
-    console.log(`${colors.yellow}Deploying maintenance mode...${colors.reset}`);
+    console.log(`${colors.yellow}Preparing maintenance mode...${colors.reset}`);
     
     const maintenancePath = path.join(__dirname, '..', 'maintenance.html');
     
@@ -237,16 +262,21 @@ class RailwayUsageMonitor {
       return false;
     }
     
-    // This would deploy the maintenance page
-    // Implementation depends on Railway's static site deployment
-    console.log(`${colors.green}✓ Maintenance mode prepared${colors.reset}`);
-    console.log('To deploy maintenance mode:');
-    console.log('  1. Create a new Railway service');
-    console.log('  2. Deploy maintenance.html as static site');
+    console.log(`${colors.green}✓ Maintenance page found at: ${maintenancePath}${colors.reset}`);
+    console.log('\nManual deployment steps:');
+    console.log('  1. Create a new Railway service for static hosting');
+    console.log('  2. Deploy maintenance.html as static site:');
+    console.log('     railway up --service maintenance');
     console.log('  3. Update DNS to point to maintenance service');
-    console.log('  4. Shut down main application services\n');
+    console.log('  4. Shut down main application services:');
+    console.log('     railway down --service backend');
+    console.log('     railway down --service frontend\n');
     
-    return true;
+    console.log('For automated deployment, implement Railway API integration.');
+    console.log('See: https://docs.railway.app/reference/api-reference\n');
+    
+    // Return false since we're not actually deploying automatically
+    return false;
   }
 
   /**
@@ -305,8 +335,10 @@ class RailwayUsageMonitor {
   }
 }
 
-// CLI
-if (import.meta.url === `file://${process.argv[1]}`) {
+// CLI - check if this script is being run directly
+const scriptPath = fileURLToPath(import.meta.url);
+const runPath = process.argv[1];
+if (scriptPath === runPath) {
   const args = process.argv.slice(2);
   const options = {};
   
